@@ -1,23 +1,17 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
 from guardrails.logger import logger
+import traceback
 
-
-def safe_get_with_brackets(
-    container: Union[str, List[Any], Any], key: Any, default: Optional[Any] = None
-) -> Any:
+def safe_get_with_brackets(container, key, default=None):
     try:
         value = container[key]
         if not value:
             return default
         return value
     except Exception as e:
-        logger.debug(
-            f"""
-            Failed to get value for key: {key} out of container: {container}.
-            Reason: {e}
-            Fallbacking to default value...
-            """
-        )
+        logger.debug(f"Failed to get value for key: {key} out of container: {container}!")
+        logger.debug(e)
+        traceback.print_stack()  # Add this
         return default
 
 
